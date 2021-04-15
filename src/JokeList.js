@@ -9,7 +9,7 @@ class JokeList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      jokes: []
+      jokes: [],
     };
     this.upVote = this.upVote.bind(this);
     this.downVote = this.downVote.bind(this);
@@ -18,18 +18,18 @@ class JokeList extends Component {
   async componentDidMount() {
     try {
       const jokes = [];
-      while (jokes.length < 10) {
+      while (jokes.length < 5) {
         const res = await fetch(`${CORS_PROXY}${REQUEST_URL}`, {
           headers: {
-            Accept: "application/json"
-          }
+            Accept: "application/json",
+          },
         });
         const data = await res.json();
         if (data.status === 200) {
           jokes.push({
             id: data.id,
             joke: data.joke,
-            rating: 0
+            rating: 0,
           });
         } else {
           console.log("Problem with fetch URL request.");
@@ -37,14 +37,14 @@ class JokeList extends Component {
       }
       this.setState({ jokes: jokes });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
   upVote(id) {
     const state = this.state;
     const jokes = state.jokes
-      .map(j => {
+      .map((j) => {
         if (j.id === id) {
           return { ...j, rating: j.rating + 1 };
         } else {
@@ -54,9 +54,9 @@ class JokeList extends Component {
       .sort((a, b) => b.rating - a.rating);
 
     if (id) {
-      this.setState(st => {
+      this.setState((st) => {
         return {
-          jokes: jokes
+          jokes: jokes,
         };
       });
     }
@@ -65,7 +65,7 @@ class JokeList extends Component {
   downVote(id) {
     const state = this.state;
     const jokes = state.jokes
-      .map(j => {
+      .map((j) => {
         if (j.id === id) {
           return { ...j, rating: j.rating - 1 };
         } else {
@@ -75,16 +75,16 @@ class JokeList extends Component {
       .sort((a, b) => b.rating - a.rating);
 
     if (id) {
-      this.setState(st => {
+      this.setState((st) => {
         return {
-          jokes: jokes
+          jokes: jokes,
         };
       });
     }
   }
 
   render() {
-    const jokes = this.state.jokes.map(j => (
+    const jokes = this.state.jokes.map((j) => (
       <Joke
         key={j.id}
         jokeId={j.id}
